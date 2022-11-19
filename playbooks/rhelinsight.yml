@@ -1,0 +1,20 @@
+---
+- name: install Red Hat Insight Client RPM
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: install RPM
+    yum:
+      name: insights-client
+      state: present
+
+- name: register insights client
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: register insights client 
+    command: insights-client --register
+
+... 

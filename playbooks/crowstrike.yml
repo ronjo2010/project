@@ -1,0 +1,41 @@
+---
+- name: copy rpm to remote hosts
+  hosts: all
+  gather_facts: no
+  tasks:
+  - name: copy rpm to dest
+    copy:
+      src: ../falcon/falcon-sensor-6.34.0-13108.el7.x86_64.rpm
+      dest: /tmp/falcon-sensor-6.34.0-13108.el7.x86_64.rpm
+      force: yes
+
+- name: install RPM
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: install RPM
+    yum:
+      name: /tmp/falcon-sensor-6.34.0-13108.el7.x86_64.rpm
+      state: present
+
+- name: register host 
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: register host to crowstrike
+    command: /opt/CrowdStrike/falconctl -s --cid=684B8CE252584CFDB0F436EC41BC2FC6-34 --tags="LINUX"
+
+- name: start falcon service 
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: start falcon service
+    service: 
+      name: falcon-sensor
+      state: started
+      enabled: true
+
+... 

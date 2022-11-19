@@ -1,0 +1,19 @@
+---
+- hosts: all 
+  vars:
+    package_names:
+      - vim 
+      - telnet
+  tasks:
+    - name: "Check if listed package is installed or not "
+      package:
+        name: "{{ item }}"
+        state: present
+      check_mode: true
+      loop: "{{ package_names }}"
+      register: package_check
+
+    - name: "Print execution results"
+      debug:
+        msg: "Package is installed"
+      when: package_check is succeeded

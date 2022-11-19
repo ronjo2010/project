@@ -1,0 +1,20 @@
+---
+- hosts: all
+  remote_user: ansible 
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  connection: ssh
+  
+  tasks:
+    - name: Remove user
+      user: 
+        name: new-user
+        state: absent
+        remove: yes
+...
+    
+
+    
+
+

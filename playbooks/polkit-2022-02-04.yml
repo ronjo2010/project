@@ -1,0 +1,16 @@
+--- 
+- hosts: all 
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  connection: ssh
+
+  tasks:
+    - name: install polkit patch (polkit-0.112-26.el7_9.1.x86_64) from Red Hat or CentOS 
+      yum:
+        name: polkit 
+        state: latest  
+        update_cache: true 
+      
+... 

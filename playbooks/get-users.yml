@@ -1,0 +1,25 @@
+---
+- hosts: all
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  connection: ssh
+
+  tasks:
+    - name: Create user for Ron Jo on all Linux VMs with a sudoer priviledge
+      user:
+        name: admin.jo
+        state: present
+        comment: Ron Jo
+        groups: wheel
+        append: yes
+        password: '$6$2BcTcooQMLSuYDg5$m4iGc4yGLYR5ft8AxNBEw2nw/EbCcwWfPEOI2DBv3fkG3dnDlVwQ.EU3Ex7LL7dA1YetMkXovmkaIyiCNETnd1'	
+        shell: /bin/bash
+
+    - name: Copy Ron's SSH public key to authorized_keys
+      authorized_key:
+        user: admin.jo
+        key: "{{ lookup('file', '/home/admin.jo/.ssh/rsa_id.pub') }}"
+j
+...

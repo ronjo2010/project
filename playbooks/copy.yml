@@ -1,0 +1,39 @@
+---
+- hosts: all
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  connection: ssh
+
+- name: copy files to destination
+  hosts: localhost
+  connection: local
+  tasks:
+    - block:
+      - name: get properties of rpm 
+        stat:
+          path: ../falcon/falcon-sensor-6.34.0-13108.el6.x86_64.rpm
+          checksum_algorithm: sha1
+        register: src_info
+
+      - name: copy rpm to dest
+        copy:
+          src: ../falcon/falcon-sensor-6.34.0-13108.el6.x86_64.rpm
+          dest: /tmp/falcon-sensor-6.34.0-13108.el6.x86_64.rpm
+          force: yes
+          checksum:
+        register: copy_out
+
+      - name: Fail if copy was a failure
+        fail:
+          msg: "Copy failed!"
+        when: src_info.stat.checksum != copy_out.checksum
+
+      - name: Print Copy successful
+        debug:
+          msg: "Copy Successful!"
+
+      tags:
+        - checksum
+... 

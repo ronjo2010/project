@@ -1,0 +1,14 @@
+---
+  - name: Shell Examples
+    hosts: all
+    vars:
+      - username: ben.whitworth
+    become: true
+    tasks:
+
+    - name: lock account
+      shell:
+        "passwd -l {{ username }}; chage -E0 {{ username }}"
+      register: output
+    - debug: msg="{{output.stdout_lines}}"
+
